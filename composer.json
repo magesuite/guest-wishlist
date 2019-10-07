@@ -1,0 +1,15 @@
+{
+  "name": "creativestyle/magesuite-guest-wishlist",
+  "description": "Modules allow guests to create wishlists",
+  "homepage": "https://creativestyle.de",
+  "license": "OSL-3.0",
+  "type": "magento2-module",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "MageSuite\\GuestWishlist\\": ""
+    }
+  }
+}
