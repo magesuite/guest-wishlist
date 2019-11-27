@@ -4,4 +4,6 @@
                 type="MageSuite\GuestWishlist\Controller\WishlistProvider" />
     <preference for="Magento\Wishlist\Block\Customer\Wishlist"
                 type="MageSuite\GuestWishlist\Block\Customer\Wishlist" />
+    <preference for="Magento\Wishlist\Model\AuthenticationStateInterface"
+                type="MageSuite\GuestWishlist\Model\Wishlist\AuthenticationState" />
 </config>
