@@ -28,6 +28,10 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
+    /**
+     * @var \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider
+     */
+    protected $cookieBasedWishlistProvider;
 
     /**
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
@@ -39,13 +43,15 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider
     )
     {
         $this->request = $request;
         $this->wishlistFactory = $wishlistFactory;
         $this->customerSession = $customerSession;
         $this->messageManager = $messageManager;
+        $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
     }
 
     /**
@@ -65,32 +71,7 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
             $wishlist = $this->wishlistFactory->create();
 
             if (!$customerId) {
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                /** @var \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager */
-                $cookieManager = $objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class);
-
-                if ($cookieManager->getCookie('wishlist')) {
-                    $wishlist->load($cookieManager->getCookie('wishlist'), 'sharing_code');
-                }
-
-                if ($wishlist->getId()) {
-                    return $wishlist;
-                }
-
-                $wishlist->setCustomerId(0);
-                $wishlist->setSharingCode($objectManager->get(\Magento\Framework\Math\Random::class)->getUniqueHash());
-                $wishlist->save();
-
-                $cookieMetadataManager = $objectManager->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class);
-                /** @var \Magento\Framework\Session\SessionManagerInterface $sessionManager */
-                $sessionManager = $objectManager->get(\Magento\Framework\Session\SessionManagerInterface::class);
-                $metadata = $cookieMetadataManager
-                    ->createPublicCookieMetadata()
-                    ->setPath($sessionManager->getCookiePath())
-                    ->setDomain($sessionManager->getCookieDomain())
-                    ->setDuration(86400 * 365);
-
-                $cookieManager->setPublicCookie('wishlist', $wishlist->getSharingCode(), $metadata);
+                $wishlist = $this->cookieBasedWishlistProvider->getWishlist();
 
                 $this->wishlist = $wishlist;
 
