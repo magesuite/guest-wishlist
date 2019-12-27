@@ -18,8 +18,7 @@ class Copy extends \Magento\Framework\App\Action\Action
         \Magento\Framework\App\Action\Context $context,
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
         \Magento\Framework\Controller\Result\RedirectFactory $redirectFactory
-    )
-    {
+    ) {
         parent::__construct($context);
 
         $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
