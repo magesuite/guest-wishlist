@@ -17,8 +17,7 @@ class MergeWishlistAfterLogin implements \Magento\Framework\Event\ObserverInterf
     public function __construct(
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
         \MageSuite\GuestWishlist\Service\WishlistMerger $wishlistMerger
-    )
-    {
+    ) {
         $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
         $this->wishlistMerger = $wishlistMerger;
     }
@@ -26,7 +25,7 @@ class MergeWishlistAfterLogin implements \Magento\Framework\Event\ObserverInterf
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $customer = $observer->getEvent()->getData('customer');
-        $guestWishlist = $this->cookieBasedWishlistProvider->getWishlist(false);
+        $guestWishlist = $this->cookieBasedWishlistProvider->getWishlist(null);
 
         if($guestWishlist == null) {
             return;
