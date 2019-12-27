@@ -28,25 +28,19 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
+    
     /**
      * @var \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider
      */
     protected $cookieBasedWishlistProvider;
 
-    /**
-     * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param RequestInterface $request
-     */
     public function __construct(
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\RequestInterface $request,
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider
-    )
-    {
+    ) {
         $this->request = $request;
         $this->wishlistFactory = $wishlistFactory;
         $this->customerSession = $customerSession;
@@ -74,7 +68,6 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
                 $wishlist = $this->cookieBasedWishlistProvider->getWishlist();
 
                 $this->wishlist = $wishlist;
-
                 return $wishlist;
             }
 
