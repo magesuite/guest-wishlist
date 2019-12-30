@@ -8,7 +8,7 @@ class CopyWishlistLink extends \Magento\Framework\View\Element\Template
 
     public function _toHtml()
     {
-        if(!$this->getViewModel()->isCustomerGuest() || !$this->getViewModel()->wishlistHasItems()) {
+        if (!$this->getViewModel()->isCustomerGuest() || !$this->getViewModel()->wishlistHasItems()) {
             return '';
         }
 

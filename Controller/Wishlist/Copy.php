@@ -30,7 +30,7 @@ class Copy extends \Magento\Framework\App\Action\Action
         $redirect = $this->redirectFactory->create();
         $sharingCode = $this->_request->getParam('sharing_code');
 
-        if(!empty($sharingCode)) {
+        if (!empty($sharingCode)) {
             $this->cookieBasedWishlistProvider->setCookieWithSharingCode($sharingCode);
         }
 

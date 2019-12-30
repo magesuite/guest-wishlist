@@ -27,7 +27,7 @@ class MergeWishlistAfterLogin implements \Magento\Framework\Event\ObserverInterf
         $customer = $observer->getEvent()->getData('customer');
         $guestWishlist = $this->cookieBasedWishlistProvider->getWishlist(false);
 
-        if($guestWishlist == null) {
+        if ($guestWishlist == null) {
             return;
         }
 

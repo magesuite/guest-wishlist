@@ -31,7 +31,7 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
 
     public function isCustomerGuest()
     {
-        return $this->customerSession->getCustomerId() == null;
+        return !$this->customerSession->isLoggedIn();
     }
 
     /**

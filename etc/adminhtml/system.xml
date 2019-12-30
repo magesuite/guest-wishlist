@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magesuite" translate="label" sortOrder="300">
+            <label>MageSuite</label>
+        </tab>
+        <section id="guest_wishlist" translate="label" type="text" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Guest Wishlist</label>
+            <tab>magesuite</tab>
+            <resource>MageSuite_GuestWishlist::config_guest_wishlist</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1">
+                <label>General</label>
+                <field id="cookie_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Guest wishlist cookie lifetime (minutes)</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

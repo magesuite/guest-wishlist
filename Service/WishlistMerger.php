@@ -18,7 +18,8 @@ class WishlistMerger
      * @param $guestWishlist \Magento\Wishlist\Model\Wishlist
      * @param $customer \Magento\Customer\Model\Customer
      */
-    public function assignGuestWishlistItemsToCustomer($guestWishlist, $customer) {
+    public function assignGuestWishlistItemsToCustomer($guestWishlist, $customer)
+    {
         $customerId = $customer->getId();
         $customerWishlist = $this->wishlistFactory->create();
         $customerWishlist->loadByCustomerId($customerId, true);
@@ -26,7 +27,7 @@ class WishlistMerger
         $guestWishlistItems = $guestWishlist->getItemCollection();
 
         /** @var \Magento\Wishlist\Model\Item $item */
-        foreach($guestWishlistItems as $item) {
+        foreach ($guestWishlistItems as $item) {
             $item->setWishlistId($customerWishlist->getId());
             $item->save();
         }

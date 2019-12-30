@@ -35,7 +35,7 @@ class CountItemsForGuestWishlist
 
     public function aroundGetItemCount(\Magento\Wishlist\Helper\Data $subject, callable $proceed)
     {
-        if ($this->customerIsLogged()) {
+        if (!$this->isCustomerGuest()) {
             return $proceed();
         }
 
@@ -61,8 +61,8 @@ class CountItemsForGuestWishlist
     /**
      * @return bool
      */
-    public function customerIsLogged()
+    public function isCustomerGuest()
     {
-        return $this->customerSession->getCustomerId() > 0;
+        return !$this->customerSession->isLoggedIn();
     }
 }

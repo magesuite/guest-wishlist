@@ -64,11 +64,13 @@ class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\Abstra
         $this->customerSession->logout();
     }
 
-    public static function loadWishlist() {
+    public static function loadWishlist()
+    {
         include __DIR__ .'/../_files/guest_wishlist.php';
     }
 
-    public static function loadWishlistRollback() {
+    public static function loadWishlistRollback()
+    {
         include __DIR__ .'/../_files/guest_wishlist_rollback.php';
     }
 }
