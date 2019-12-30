@@ -27,8 +27,7 @@ class CountItemsForGuestWishlist
         \Magento\Customer\Model\Session $customerSession,
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->customerSession = $customerSession;
         $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
         $this->scopeConfig = $scopeConfig;

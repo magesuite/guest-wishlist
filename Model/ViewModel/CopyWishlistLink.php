@@ -23,31 +23,34 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
         \Magento\Customer\Model\Session $customerSession,
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
         \Magento\Framework\UrlInterface $url
-    )
-    {
+    ) {
         $this->customerSession = $customerSession;
         $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
         $this->url = $url;
     }
 
-    public function isCustomerGuest() {
+    public function isCustomerGuest()
+    {
         return $this->customerSession->getCustomerId() == null;
     }
 
     /**
      * @return \Magento\Wishlist\Model\Wishlist
      */
-    public function getGuestWishlist() {
+    public function getGuestWishlist()
+    {
         return $this->cookieBasedWishlistProvider->getWishlist(true);
     }
 
-    public function getCopyLink() {
+    public function getCopyLink()
+    {
         $guestWishlsit = $this->getGuestWishlist();
 
         return $this->url->getUrl('guest_wishlist/wishlist/copy', ['sharing_code' => $guestWishlsit->getSharingCode()]);
     }
 
-    public function wishlistHasItems() {
+    public function wishlistHasItems()
+    {
         $guestWishlsit = $this->getGuestWishlist();
 
         return $guestWishlsit->getItemsCount() > 0;
