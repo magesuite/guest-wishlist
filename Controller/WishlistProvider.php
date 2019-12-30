@@ -71,11 +71,9 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
             $wishlist = $this->wishlistFactory->create();
 
             if (!$customerId) {
-                $wishlist = $this->cookieBasedWishlistProvider->getWishlist();
+                $this->wishlist = $this->cookieBasedWishlistProvider->getWishlist();
 
-                $this->wishlist = $wishlist;
-
-                return $wishlist;
+                return $this->wishlist;
             }
 
             if ($wishlistId) {
