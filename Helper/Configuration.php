@@ -20,4 +20,11 @@ class Configuration
     {
         return $this->scopeConfig->getValue(self::GUEST_WISHLIST_COOKIE_LIFETIME_XML_PATH);
     }
+
+    public function getUseQtyInWishlist() {
+        return $this->scopeConfig->getValue(
+            \Magento\Wishlist\Helper\Data::XML_PATH_WISHLIST_LINK_USE_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }

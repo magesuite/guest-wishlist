@@ -19,18 +19,18 @@ class CountItemsForGuestWishlist
     protected $cookieBasedWishlistProvider;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \MageSuite\GuestWishlist\Helper\Configuration
      */
-    protected $scopeConfig;
+    protected $configuration;
 
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \MageSuite\GuestWishlist\Helper\Configuration $configuration
     ) {
         $this->customerSession = $customerSession;
         $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
-        $this->scopeConfig = $scopeConfig;
+        $this->configuration = $configuration;
     }
 
     public function aroundGetItemCount(\Magento\Wishlist\Helper\Data $subject, callable $proceed)
@@ -50,10 +50,7 @@ class CountItemsForGuestWishlist
             ->getItemCollection()
             ->setInStockFilter(true);
 
-        $useQty = $this->scopeConfig->getValue(
-            \Magento\Wishlist\Helper\Data::XML_PATH_WISHLIST_LINK_USE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $useQty = $this->configuration->getUseQtyInWishlist();
 
         return $useQty ? $collection->getItemsQty() : $collection->count();
     }
