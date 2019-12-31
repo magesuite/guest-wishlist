@@ -1,0 +1,10 @@
+<?php
+/** @var \MageSuite\GuestWishlist\Model\ViewModel\CopyWishlistLink $viewModel */
+$viewModel = $block->getViewModel();
+$guestWishlist = $viewModel->getGuestWishlist();
+?>
+<?=__('To recreate this wishlist in other browsers please use following link')?>:
+<code>
+    <?=$viewModel->getCopyLink()?>
+</code>
+

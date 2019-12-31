@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <guest_wishlist>
+            <general>
+                <cookie_lifetime>525600</cookie_lifetime>
+            </general>
+        </guest_wishlist>
+    </default>
+</config>
