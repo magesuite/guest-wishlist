@@ -35,11 +35,7 @@ class AddTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('wishlist/index/add/product/' . $product->getId());
 
         $this->assertSessionMessages(
-            $this->equalTo(
-                [
-                    PHP_EOL.'Simple Product has been added to your Wish List. Click <a href="http://localhost/index.php/">here</a> to continue shopping.',
-                ]
-            ),
+            $this->contains('Simple Product has been added to your Wish List.'),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
