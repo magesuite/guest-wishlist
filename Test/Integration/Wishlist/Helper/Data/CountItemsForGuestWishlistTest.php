@@ -19,7 +19,7 @@ class CountItemsForGuestWishlistTest extends \PHPUnit\Framework\TestCase
      */
     protected $cookieBasedWishlistProvider;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         $this->helper = $this->objectManager->create(\Magento\Wishlist\Helper\Data::class);

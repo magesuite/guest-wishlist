@@ -14,7 +14,7 @@ class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\Abstra
      */
     protected $customerSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

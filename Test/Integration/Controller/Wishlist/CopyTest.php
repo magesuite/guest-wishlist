@@ -14,7 +14,7 @@ class CopyTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $cookieBasedWishlistProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

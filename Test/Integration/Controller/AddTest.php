@@ -9,7 +9,7 @@ class AddTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $messages;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
