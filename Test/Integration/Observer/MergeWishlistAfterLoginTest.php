@@ -59,7 +59,7 @@ class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\Abstra
         $this->assertEquals(1, $wishlist->getItemsCount());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->logout();
     }
