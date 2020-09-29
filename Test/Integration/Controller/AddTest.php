@@ -25,6 +25,7 @@ class AddTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
         $this->getRequest()->setPostValue(['form_key' => $formKey->getFormKey()]);
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -34,9 +35,11 @@ class AddTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('wishlist/index/add/product/' . $product->getId());
 
-        $this->assertSessionMessages(
-            $this->contains('Simple Product has been added to your Wish List.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
+        $messages = $this->getMessages();
+        $message = array_pop($messages);
+
+        $assertContains = method_exists($this, 'assertStringContainsString') ? 'assertStringContainsString' : 'assertContains';
+
+        $this->$assertContains('Simple Product has been added to your Wish List.', $message);
     }
 }
