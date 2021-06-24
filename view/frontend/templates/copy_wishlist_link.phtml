@@ -3,8 +3,9 @@
 $viewModel = $block->getViewModel();
 $guestWishlist = $viewModel->getGuestWishlist();
 ?>
-<?=__('To recreate this wishlist in other browsers please use following link')?>:
-<code>
-    <?=$viewModel->getCopyLink()?>
-</code>
-
+<div class="cs-dashboard__wishlist-guest">
+    <span class="cs-dashboard__wishlist-guest-label"><?=__('To recreate this wishlist in other browsers please use following link')?>:</span>
+    <code class="cs-dashboard__wishlist-guest-code">
+        <?=$viewModel->getCopyLink()?>
+    </code>
+</div>
