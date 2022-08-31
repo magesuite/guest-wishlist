@@ -5,6 +5,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
+$product->isObjectNew(true);
+$product->priceReindexCallback();
 
 $wishlist = $objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
 
