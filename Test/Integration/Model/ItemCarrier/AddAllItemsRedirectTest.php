@@ -1,6 +1,6 @@
 <?php
 
-namespace MageSuite\GuestWishlist\Test\Integration\Controller\Wishlist;
+namespace MageSuite\GuestWishlist\Test\Integration\Model\ItemCarrier;
 
 class AddAllItemsRedirectTest extends \PHPUnit\Framework\TestCase
 {
