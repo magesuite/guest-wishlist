@@ -1,0 +1,13 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:MageSuite_Changelog:etc/changelog.xsd">
+    <module id="MageSuite_GuestWishlist" name="MageSuite_GuestWishlist">
+        <changelog>
+            <tag version="1.2.1" date="2022-12-13">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Fix for doubled products when I merge guest and logged in user's Wishlist</overview>
+                    <ticket_id>MGS-4122</ticket_id>
+                </entry>
+            </tag>
+        </changelog>
+    </module>
+</config>
