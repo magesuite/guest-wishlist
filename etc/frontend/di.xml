@@ -15,4 +15,10 @@
     <type name="Magento\Wishlist\Controller\Index\Index">
         <plugin sortOrder="10" name="add_layout_handler_for_guest_wishlist" type="MageSuite\GuestWishlist\Plugin\Wishlist\Controller\Index\Index\AddLayoutHandlerForGuestWishlist"/>
     </type>
+
+    <type name="Magento\Wishlist\Model\Item">
+        <plugin name="skip_save_if_item_exists"
+                type="MageSuite\GuestWishlist\Plugin\Wishlist\Model\Item\SkipSaveIfItemExists"
+                sortOrder="10"/>
+    </type>
 </config>

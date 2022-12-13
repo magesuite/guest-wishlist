@@ -28,7 +28,7 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
-    
+
     /**
      * @var \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider
      */
@@ -89,6 +89,12 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
             return false;
         }
         $this->wishlist = $wishlist;
+
         return $wishlist;
+    }
+
+    public function clearCache(): void
+    {
+        $this->wishlist = null;
     }
 }
