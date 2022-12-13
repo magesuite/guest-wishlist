@@ -19,7 +19,6 @@ class SkipSaveIfItemExists
         callable $proceed
     ): \Magento\Wishlist\Model\Item {
 
-        return $proceed();
         $item = $this->getWishlistItem->execute((int) $subject->getWishlistId(), (int) $subject->getProductId());
 
         if ($item instanceof \Magento\Wishlist\Model\Item && $item->getId()) {
