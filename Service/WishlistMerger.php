@@ -29,7 +29,12 @@ class WishlistMerger
         /** @var \Magento\Wishlist\Model\Item $item */
         foreach ($guestWishlistItems as $item) {
             $item->setWishlistId($customerWishlist->getId());
-            $item->save();
+            $savedItem = $item->save();
+
+            // if the item exists in customer's wishlist will be returned instead of the guest's one
+            if ($savedItem->getId() != $item->getId()) {
+                $item->delete();
+            }
         }
     }
 }
