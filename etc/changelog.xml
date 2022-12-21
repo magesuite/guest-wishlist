@@ -8,6 +8,13 @@
                     <ticket_id>MGS-4122</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.2.3" date="2022-12-13">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Fix for bug leaving products in wishlist after customer logs out</overview>
+                    <ticket_id>MGS-4122</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
