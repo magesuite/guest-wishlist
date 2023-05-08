@@ -6,4 +6,7 @@
                 type="MageSuite\GuestWishlist\Block\Customer\Wishlist" />
     <preference for="Magento\Wishlist\Model\AuthenticationStateInterface"
                 type="MageSuite\GuestWishlist\Model\Wishlist\AuthenticationState" />
+    <type name="Magento\Wishlist\Controller\AbstractIndex">
+        <plugin name="remove_redirect_header" type="MageSuite\GuestWishlist\Plugin\Wishlist\Controller\AbstractIndex\RemoveRedirectHeader" sortOrder="20"/>
+    </type>
 </config>
