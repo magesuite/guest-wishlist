@@ -4,37 +4,19 @@ namespace MageSuite\GuestWishlist\Service;
 
 class CookieBasedWishlistProvider
 {
-    const SECONDS_IN_MINUTE = 60;
+    public const SECONDS_IN_MINUTE = 60;
 
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    protected $cookieManager;
+    protected \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager;
 
-    /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
-     */
-    protected $wishlistFactory;
+    protected \Magento\Wishlist\Model\WishlistFactory $wishlistFactory;
 
-    /**
-     * @var \Magento\Framework\Math\Random
-     */
-    protected $random;
+    protected \Magento\Framework\Math\Random $random;
 
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $cookieMetadataFactory;
+    protected \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory;
 
-    /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
-     */
-    protected $sessionManager;
+    protected \Magento\Framework\Session\SessionManagerInterface $sessionManager;
 
-    /**
-     * @var \MageSuite\GuestWishlist\Helper\Configuration
-     */
-    protected $configuration;
+    protected \MageSuite\GuestWishlist\Helper\Configuration $configuration;
 
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -52,7 +34,7 @@ class CookieBasedWishlistProvider
         $this->configuration = $configuration;
     }
 
-    public function getWishlist($createNew = true)
+    public function getWishlist(bool $createNew = true): ?\Magento\Wishlist\Model\Wishlist
     {
         $wishlist = $this->wishlistFactory->create();
 
@@ -77,13 +59,14 @@ class CookieBasedWishlistProvider
         return $wishlist;
     }
 
-    public function setCookieWithSharingCode($sharingCode)
+    public function setCookieWithSharingCode(string $sharingCode): void
     {
         $metadata = $this->cookieMetadataFactory
             ->createPublicCookieMetadata()
             ->setPath($this->sessionManager->getCookiePath())
             ->setDomain($this->sessionManager->getCookieDomain())
-            ->setDuration($this->configuration->getGuestWishlistCookieLifetime()*self::SECONDS_IN_MINUTE);
+            ->setDuration($this->configuration->getGuestWishlistCookieLifetime() * self::SECONDS_IN_MINUTE)
+            ->setSecure(true);
 
         $this->cookieManager->setPublicCookie('wishlist', $sharingCode, $metadata);
     }
