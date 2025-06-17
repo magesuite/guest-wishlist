@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MageSuite\GuestWishlist\Service;
 
-class GetWishlistItem
+class GetWishlistItems
 {
     protected \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory $collectionFactory;
 
@@ -13,14 +13,15 @@ class GetWishlistItem
         $this->collectionFactory = $collectionFactory;
     }
 
-    public function execute(int $wishlistId, int $productId): ?\Magento\Wishlist\Model\Item
+    /**
+     * @return \Magento\Wishlist\Model\Item[]
+     */
+    public function execute(int $wishlistId, int $productId): array
     {
         $collection = $this->collectionFactory->create()
             ->addFieldToFilter('product_id', ['eq' => $productId])
             ->addFieldToFilter('wishlist_id', ['eq' => $wishlistId]);
-        $collection->getSelect()
-            ->limit(1);
 
-        return $collection->getFirstItem();
+        return $collection->getItems();
     }
 }
