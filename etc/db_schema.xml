@@ -8,5 +8,11 @@
         <constraint xsi:type="unique" referenceId="WISHLIST_CUSTOMER_ID" disabled="true">
             <column name="customer_id"/>
         </constraint>
+        <index referenceId="WISHLIST_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+        <index referenceId="WISHLIST_SHARING_CODE" indexType="btree">
+            <column name="sharing_code"/>
+        </index>
     </table>
 </schema>

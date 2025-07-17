@@ -1,0 +1,12 @@
+{
+    "wishlist": {
+        "index": {
+            "WISHLIST_CUSTOMER_ID": true,
+            "WISHLIST_SHARING_CODE": true
+        },
+        "constraint": {
+            "WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "WISHLIST_CUSTOMER_ID": true
+        }
+    }
+}
