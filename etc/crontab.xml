@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="clean_empty_guest_wishlist" instance="\MageSuite\GuestWishlist\Cron\EmptyWishlistsCleanup" method="execute">
-            <config_path>guest_wishlist/general/empty_wishlists_cleanup_cron_expression</config_path>
+        <job name="clean_wishlists" instance="\MageSuite\GuestWishlist\Cron\WishlistsCleanup" method="execute">
+            <config_path>guest_wishlist/general/wishlists_cleanup_cron_expression</config_path>
         </job>
     </group>
 </config>
