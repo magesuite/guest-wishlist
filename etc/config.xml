@@ -6,7 +6,7 @@
                 <cookie_lifetime>525600</cookie_lifetime>
                 <show_account_links_for_guest>1</show_account_links_for_guest>
                 <empty_wishlists_retention_period>1</empty_wishlists_retention_period>
-                <empty_wishlists_cleanup_cron_expression>25 1 * * *</empty_wishlists_cleanup_cron_expression>
+                <wishlists_cleanup_cron_expression>25 1 * * *</wishlists_cleanup_cron_expression>
             </general>
         </guest_wishlist>
     </default>

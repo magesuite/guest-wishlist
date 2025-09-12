@@ -22,8 +22,8 @@
                     <comment>How long (in days) empty guest wishlists are kept</comment>
                     <validate>validate-number validate-length maximum-length-4 validate-positive-number</validate>
                 </field>
-                <field id="empty_wishlists_cleanup_cron_expression" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Empty wishlists cleanup cron expression</label>
+                <field id="wishlists_cleanup_cron_expression" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Wishlists cleanup cron expression</label>
                     <comment>Provide cron expression at which cleanup should happen</comment>
                 </field>
             </group>
