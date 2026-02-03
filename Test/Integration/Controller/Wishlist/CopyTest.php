@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\GuestWishlist\Test\Integration\Controller\Wishlist;
 
 class CopyTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messages;
-
-    /**
-     * @var \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider
-     */
-    protected $cookieBasedWishlistProvider;
+    protected ?\Magento\Framework\Message\ManagerInterface $messages;
+    protected ?\MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider;
 
     protected function setUp(): void
     {
@@ -24,11 +19,11 @@ class CopyTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture loadWishlist
+     * @magentoDataFixture MageSuite_GuestWishlist::Test/Integration/_files/guest_wishlist.php
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testWishlistIsSharedAfterUsingCopyLink()
+    public function testWishlistIsSharedAfterUsingCopyLink(): void
     {
         $originalWishlist = $this->cookieBasedWishlistProvider->getWishlist(true);
         $this->assertEquals(0, $originalWishlist->getItemsCount());
@@ -37,15 +32,5 @@ class CopyTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $assignedWishlist = $this->cookieBasedWishlistProvider->getWishlist(true);
         $this->assertEquals(1, $assignedWishlist->getItemsCount());
-    }
-
-    public static function loadWishlist()
-    {
-        include __DIR__ .'/../../_files/guest_wishlist.php';
-    }
-
-    public static function loadWishlistRollback()
-    {
-        include __DIR__ .'/../../_files/guest_wishlist_rollback.php';
     }
 }

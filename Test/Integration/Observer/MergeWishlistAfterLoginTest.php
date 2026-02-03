@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\GuestWishlist\Test\Integration\Observer;
 
 class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
-     */
-    protected $cookieManager;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
+    protected ?\Magento\Framework\Stdlib\CookieManagerInterface $cookieManager;
+    protected ?\Magento\Customer\Model\Session $customerSession;
 
     protected function setUp(): void
     {
@@ -25,11 +20,11 @@ class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\Abstra
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     * @magentoDataFixture loadWishlist
+     * @magentoDataFixture MageSuite_GuestWishlist::Test/Integration/_files/guest_wishlist.php
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testGuestWishlistItemsAreAssignedToCustmerAfterLoggingIn()
+    public function testGuestWishlistItemsAreAssignedToCustomerAfterLoggingIn(): void
     {
         $wishlist = $this->_objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
         $wishlist->loadByCustomerId(1);
@@ -62,15 +57,5 @@ class MergeWishlistAfterLoginTest extends \Magento\TestFramework\TestCase\Abstra
     protected function tearDown(): void
     {
         $this->customerSession->logout();
-    }
-
-    public static function loadWishlist()
-    {
-        include __DIR__ .'/../_files/guest_wishlist.php';
-    }
-
-    public static function loadWishlistRollback()
-    {
-        include __DIR__ .'/../_files/guest_wishlist_rollback.php';
     }
 }
