@@ -1,53 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\GuestWishlist\Test\Integration\Model\ItemCarrier;
 
 class AddAllItemsRedirectTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
+    protected ?\Magento\Wishlist\Model\Wishlist $wishlist;
+    protected ?\Magento\Wishlist\Model\ItemCarrier $itemCarrier;
 
-    /**
-     * @var \Magento\Wishlist\Model\Wishlist
-     */
-    protected $wishlist;
-
-    /**
-     * @var \Magento\Wishlist\Model\ItemCarrier
-     */
-    protected $itemCarrier;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
-        $this->wishlist = $this->objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
-        $this->itemCarrier = $this->objectManager->create(\Magento\Wishlist\Model\ItemCarrier::class);
+        $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
+        $this->wishlist = $objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
+        $this->itemCarrier = $objectManager->create(\Magento\Wishlist\Model\ItemCarrier::class);
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture loadWishlist
+     * @magentoDataFixture MageSuite_GuestWishlist::Test/Integration/_files/guest_wishlist.php
      * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testItRedirectToCorrectPath()
+    public function testItRedirectToCorrectPath(): void
     {
         $wishlist = $this->wishlist->loadByCode('guest_wishlist');
-
         $redirect = $this->itemCarrier->moveAllToCart($wishlist, null);
 
         $this->assertEquals(sprintf('http://localhost/index.php/wishlist/index/index/wishlist_id/%s/', $wishlist->getId()), $redirect);
-    }
-
-    public static function loadWishlist()
-    {
-        include __DIR__ .'/../../_files/guest_wishlist.php';
-    }
-
-    public static function loadWishlistRollback()
-    {
-        include __DIR__ .'/../../_files/guest_wishlist_rollback.php';
     }
 }
