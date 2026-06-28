@@ -22,6 +22,17 @@
                     <ticket_id>KRA-492</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.2.6" date="2026-06-26">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Allow guests to update an existing wishlist item</overview>
+                    <description>
+                        SkipSaveIfItemExists no longer treats the item being saved as its own duplicate,
+                        so updating the quantity (or options) of an existing wishlist item is persisted
+                        instead of being silently skipped.
+                    </description>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

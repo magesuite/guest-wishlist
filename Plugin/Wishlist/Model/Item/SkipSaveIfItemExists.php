@@ -24,14 +24,21 @@ class SkipSaveIfItemExists
         $items = $this->getWishlistItems->execute((int) $subject->getWishlistId(), (int) $subject->getProductId());
         $guestValue = $subject->getOptionByCode('simple_product')?->getValue();
         $sharedStoreIds = $this->getSharedStoreIds((int) $subject->getStoreId());
+        $subjectId = (int) $subject->getId();
 
         foreach ($items as $item) {
-            if ($item instanceof \Magento\Wishlist\Model\Item && $item->getId()) {
-                $originValue = $item->getOptionByCode('simple_product')?->getValue();
+            if (!$item instanceof \Magento\Wishlist\Model\Item || !$item->getId()) {
+                continue;
+            }
 
-                if ($guestValue === $originValue && in_array($item->getStoreId(), $sharedStoreIds)) {
-                    return $item;
-                }
+            if ((int) $item->getId() === $subjectId) {
+                continue;
+            }
+
+            $originValue = $item->getOptionByCode('simple_product')?->getValue();
+
+            if ($guestValue === $originValue && in_array($item->getStoreId(), $sharedStoreIds)) {
+                return $item;
             }
         }
 
