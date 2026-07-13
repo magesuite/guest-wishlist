@@ -34,25 +34,24 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
         return !$this->customerSession->isLoggedIn();
     }
 
-    /**
-     * @return \Magento\Wishlist\Model\Wishlist
-     */
-    public function getGuestWishlist()
+    public function getGuestWishlist(): ?\Magento\Wishlist\Model\Wishlist
     {
-        return $this->cookieBasedWishlistProvider->getWishlist(true);
+        return $this->cookieBasedWishlistProvider->getWishlist(false);
     }
 
     public function getCopyLink()
     {
-        $guestWishlsit = $this->getGuestWishlist();
+        $guestWishlist = $this->getGuestWishlist();
+        if (!$guestWishlist) {
+            return '';
+        }
 
-        return $this->url->getUrl('guest_wishlist/wishlist/copy', ['sharing_code' => $guestWishlsit->getSharingCode()]);
+        return $this->url->getUrl('guest_wishlist/wishlist/copy', ['sharing_code' => $guestWishlist->getSharingCode()]);
     }
 
     public function wishlistHasItems()
     {
-        $guestWishlsit = $this->getGuestWishlist();
-
-        return $guestWishlsit->getItemsCount() > 0;
+        $guestWishlist = $this->getGuestWishlist();
+        return $guestWishlist && $guestWishlist->getItemsCount() > 0;
     }
 }

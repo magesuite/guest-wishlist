@@ -4,6 +4,15 @@ namespace MageSuite\GuestWishlist\Controller;
 
 class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderInterface
 {
+    public const ACTIONS_ALLOWED_TO_CREATE_WISHLIST = [
+        'wishlist_index_add',
+        'wishlist_index_fromcart',
+    ];
+
+    public const ACTIONS_ALLOWED_TO_RENDER_EMPTY_WISHLIST = [
+        'wishlist_index_index',
+    ];
+
     /**
      * @var \Magento\Wishlist\Model\Wishlist
      */
@@ -65,7 +74,11 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
             $wishlist = $this->wishlistFactory->create();
 
             if (!$customerId) {
-                $this->wishlist = $this->cookieBasedWishlistProvider->getWishlist();
+                $this->wishlist = $this->cookieBasedWishlistProvider->getWishlist($this->shouldCreateWishlistForGuest());
+
+                if (!$this->wishlist && $this->shouldRenderEmptyWishlistForGuest()) {
+                    $this->wishlist = $wishlist;
+                }
 
                 return $this->wishlist;
             }
@@ -96,5 +109,15 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
     public function clearCache(): void
     {
         $this->wishlist = null;
+    }
+
+    protected function shouldCreateWishlistForGuest(): bool
+    {
+        return in_array($this->request->getFullActionName(), self::ACTIONS_ALLOWED_TO_CREATE_WISHLIST, true);
+    }
+
+    protected function shouldRenderEmptyWishlistForGuest(): bool
+    {
+        return in_array($this->request->getFullActionName(), self::ACTIONS_ALLOWED_TO_RENDER_EMPTY_WISHLIST, true);
     }
 }

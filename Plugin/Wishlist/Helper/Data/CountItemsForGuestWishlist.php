@@ -1,43 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\GuestWishlist\Plugin\Wishlist\Helper\Data;
 
-/**
- * Default logic for counting wishlist items to display them in badge uses customer session.
- * This plugin provides logic that counts wishlist items when customer is not logged in.
- */
 class CountItemsForGuestWishlist
 {
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
-     */
-    protected $wishlistFactory;
-
-    /**
-     * @var \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider
-     */
-    protected $cookieBasedWishlistProvider;
-
-    /**
-     * @var \MageSuite\GuestWishlist\Helper\Configuration
-     */
-    protected $configuration;
-
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
-        \MageSuite\GuestWishlist\Helper\Configuration $configuration
+        protected \Magento\Customer\Model\Session $customerSession,
+        protected \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
+        protected \MageSuite\GuestWishlist\Helper\Configuration $configuration
     ) {
-        $this->customerSession = $customerSession;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->cookieBasedWishlistProvider = $cookieBasedWishlistProvider;
-        $this->configuration = $configuration;
     }
 
     public function aroundGetItemCount(\Magento\Wishlist\Helper\Data $subject, callable $proceed)
@@ -49,30 +22,21 @@ class CountItemsForGuestWishlist
         return $this->countWishlistItems();
     }
 
-    protected function countWishlistItems()
+    protected function countWishlistItems(): int|float
     {
-        $customerId = $this->customerSession->getCustomerId();
-
-        if (!$customerId) {
-            $guestWishlist = $this->cookieBasedWishlistProvider->getWishlist(true);
-        } else {
-            $guestWishlist = $this->wishlistFactory->create();
-            $guestWishlist->loadByCustomerId($customerId, true);
+        $wishlist = $this->cookieBasedWishlistProvider->getWishlist(false);
+        if (!$wishlist || !$wishlist->getId()) {
+            return 0;
         }
 
-        $collection = $guestWishlist
-            ->getItemCollection()
-            ->setInStockFilter(true);
+        $collection = $wishlist->getItemCollection()->setInStockFilter(true);
 
-        $useQty = $this->configuration->getUseQtyInWishlist();
-
-        return $useQty ? $collection->getItemsQty() : $collection->count();
+        return $this->configuration->getUseQtyInWishlist()
+            ? $collection->getItemsQty()
+            : $collection->count();
     }
 
-    /**
-     * @return bool
-     */
-    public function isCustomerGuest()
+    public function isCustomerGuest(): bool
     {
         return !$this->customerSession->isLoggedIn();
     }
