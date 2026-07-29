@@ -11,6 +11,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
     protected ?\Magento\Framework\Stdlib\CookieManagerInterface $cookieManager;
     protected ?\Magento\Wishlist\Model\WishlistFactory $wishlistFactory;
     protected ?\MageSuite\GuestWishlist\Controller\WishlistProvider $wishlistProvider;
+    protected ?\MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider;
 
     protected function setUp(): void
     {
@@ -21,6 +22,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
         $this->cookieManager = $this->_objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->wishlistFactory = $this->_objectManager->get(\Magento\Wishlist\Model\WishlistFactory::class);
         $this->wishlistProvider = $this->_objectManager->get(\MageSuite\GuestWishlist\Controller\WishlistProvider::class);
+        $this->cookieBasedWishlistProvider = $this->_objectManager->get(\MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider::class);
     }
 
     /**
@@ -49,6 +51,46 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
         $updatedItem = $this->getFirstGuestWishlistItem();
         $this->assertNotNull($updatedItem, 'Guest wishlist item disappeared after update.');
         $this->assertEquals(3, (int) $updatedItem->getQty(), 'Updated quantity was not persisted for guest.');
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture MageSuite_GuestWishlist::Test/Integration/_files/multiple_wishlists.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     */
+    public function testItCannotUpdateCustomerOwnedItemViaStolenSharingCode()
+    {
+        $customerWishlist = $this->wishlistFactory->create();
+        $customerWishlist->load('customer_wishlist', 'sharing_code');
+        $this->assertNotEquals(0, (int) $customerWishlist->getCustomerId(), 'Fixture wishlist must be customer-owned.');
+
+        $items = $customerWishlist->getItemCollection()->getItems();
+        $item = array_shift($items);
+        $this->assertNotNull($item, 'Fixture customer wishlist item is missing.');
+
+        $originalQty = (int) $item->getQty();
+        $productId = (int) $item->getProductId();
+
+        // Attacker installs the customer's stolen sharing code as their own guest wishlist cookie,
+        // exactly as MageSuite\GuestWishlist\Controller\Wishlist\Copy::execute() does with zero validation.
+        $this->cookieBasedWishlistProvider->setCookieWithSharingCode('customer_wishlist');
+        $this->wishlistProvider->clearCache();
+
+        $this->performPostRequest('wishlist/index/updateItemOptions', [
+            'id' => $item->getId(),
+            'product' => $productId,
+            'qty' => $originalQty + 99,
+        ]);
+
+        $reloadedItem = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
+        $reloadedItem->load($item->getId());
+
+        $this->assertEquals(
+            $originalQty,
+            (int) $reloadedItem->getQty(),
+            'A guest using a stolen customer sharing code must not be able to update that customer\'s wishlist item.'
+        );
     }
 
     protected function performPostRequest(string $uri, array $params): void

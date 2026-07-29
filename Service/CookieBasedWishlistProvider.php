@@ -42,7 +42,7 @@ class CookieBasedWishlistProvider
             $wishlist->load($this->cookieManager->getCookie('wishlist'), 'sharing_code');
         }
 
-        if ($wishlist->getId()) {
+        if ($wishlist->getId() && (int) $wishlist->getCustomerId() === 0) {
             return $wishlist;
         }
 
@@ -50,13 +50,14 @@ class CookieBasedWishlistProvider
             return null;
         }
 
-        $wishlist->setCustomerId(0);
-        $wishlist->setSharingCode($this->random->getUniqueHash());
-        $wishlist->save();
+        $newWishlist = $this->wishlistFactory->create();
+        $newWishlist->setCustomerId(0);
+        $newWishlist->setSharingCode($this->random->getUniqueHash());
+        $newWishlist->save();
 
-        $this->setCookieWithSharingCode($wishlist->getSharingCode());
+        $this->setCookieWithSharingCode($newWishlist->getSharingCode());
 
-        return $wishlist;
+        return $newWishlist;
     }
 
     public function setCookieWithSharingCode(string $sharingCode): void
