@@ -29,7 +29,7 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
         $this->url = $url;
     }
 
-    public function isCustomerGuest()
+    public function isCustomerGuest(): bool
     {
         return !$this->customerSession->isLoggedIn();
     }
@@ -39,7 +39,7 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
         return $this->cookieBasedWishlistProvider->getWishlist(false);
     }
 
-    public function getCopyLink()
+    public function getCopyLink(): string
     {
         $guestWishlist = $this->getGuestWishlist();
         if (!$guestWishlist) {
@@ -49,7 +49,7 @@ class CopyWishlistLink implements \Magento\Framework\View\Element\Block\Argument
         return $this->url->getUrl('guest_wishlist/wishlist/copy', ['sharing_code' => $guestWishlist->getSharingCode()]);
     }
 
-    public function wishlistHasItems()
+    public function wishlistHasItems(): bool
     {
         $guestWishlist = $this->getGuestWishlist();
         return $guestWishlist && $guestWishlist->getItemsCount() > 0;
