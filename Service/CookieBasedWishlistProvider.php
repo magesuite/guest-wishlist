@@ -20,13 +20,16 @@ class CookieBasedWishlistProvider
 
     protected \MageSuite\GuestWishlist\Helper\Configuration $configuration;
 
+    protected \Magento\Framework\App\Request\Http $request;
+
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Framework\Session\SessionManagerInterface $sessionManager,
         \Magento\Framework\Math\Random $random,
-        \MageSuite\GuestWishlist\Helper\Configuration $configuration
+        \MageSuite\GuestWishlist\Helper\Configuration $configuration,
+        \Magento\Framework\App\Request\Http $request
     ) {
         $this->cookieManager = $cookieManager;
         $this->wishlistFactory = $wishlistFactory;
@@ -69,7 +72,7 @@ class CookieBasedWishlistProvider
             ->setPath($this->sessionManager->getCookiePath())
             ->setDomain($this->sessionManager->getCookieDomain())
             ->setDuration($this->configuration->getGuestWishlistCookieLifetime() * self::SECONDS_IN_MINUTE)
-            ->setSecure(true);
+            ->setSecure($this->request->isSecure());
 
         $this->cookieManager->setPublicCookie('wishlist', $sharingCode, $metadata);
     }
