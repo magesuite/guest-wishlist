@@ -10,6 +10,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
     protected ?\Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
     protected ?\Magento\Framework\Stdlib\CookieManagerInterface $cookieManager;
     protected ?\Magento\Wishlist\Model\WishlistFactory $wishlistFactory;
+    protected ?\Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource;
     protected ?\MageSuite\GuestWishlist\Controller\WishlistProvider $wishlistProvider;
     protected ?\MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider;
 
@@ -20,6 +21,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
         $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $this->productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->cookieManager = $this->_objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->wishlistResource = $this->_objectManager->get(\Magento\Wishlist\Model\ResourceModel\Wishlist::class);
         $this->wishlistFactory = $this->_objectManager->get(\Magento\Wishlist\Model\WishlistFactory::class);
         $this->wishlistProvider = $this->_objectManager->get(\MageSuite\GuestWishlist\Controller\WishlistProvider::class);
         $this->cookieBasedWishlistProvider = $this->_objectManager->get(\MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider::class);
@@ -62,7 +64,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
     public function testItCannotUpdateCustomerOwnedItemViaStolenSharingCode()
     {
         $customerWishlist = $this->wishlistFactory->create();
-        $customerWishlist->load('customer_wishlist', 'sharing_code');
+        $this->wishlistResource->load($customerWishlist, 'customer_wishlist', 'sharing_code');
         $this->assertNotEquals(0, (int) $customerWishlist->getCustomerId(), 'Fixture wishlist must be customer-owned.');
 
         $items = $customerWishlist->getItemCollection()->getItems();
@@ -84,7 +86,8 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
         ]);
 
         $reloadedItem = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
-        $reloadedItem->load($item->getId());
+        $this->_objectManager->get(\Magento\Wishlist\Model\ResourceModel\Item::class)
+            ->load($reloadedItem, $item->getId());
 
         $this->assertEquals(
             $originalQty,
@@ -104,7 +107,7 @@ class UpdateItemOptionsTest extends \Magento\TestFramework\TestCase\AbstractCont
     protected function getFirstGuestWishlistItem(): ?\Magento\Wishlist\Model\Item
     {
         $wishlist = $this->wishlistFactory->create();
-        $wishlist->load($this->cookieManager->getCookie('wishlist'), 'sharing_code');
+        $this->wishlistResource->load($wishlist, $this->cookieManager->getCookie('wishlist'), 'sharing_code');
 
         if (!$wishlist->getId()) {
             return null;

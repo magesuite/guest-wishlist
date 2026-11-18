@@ -21,4 +21,9 @@
                 type="MageSuite\GuestWishlist\Plugin\Wishlist\Model\Item\SkipSaveIfItemExists"
                 sortOrder="10"/>
     </type>
+    <type name="MageSuite\GuestWishlist\Service\WishlistMerger">
+        <arguments>
+            <argument name="mergeDuplicates" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
 </config>
