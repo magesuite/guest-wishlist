@@ -43,13 +43,20 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
      */
     protected $cookieBasedWishlistProvider;
 
+    /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $wishlistResource;
+
     public function __construct(
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\RequestInterface $request,
-        \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider
+        \MageSuite\GuestWishlist\Service\CookieBasedWishlistProvider $cookieBasedWishlistProvider,
+        \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource
     ) {
+        $this->wishlistResource = $wishlistResource;
         $this->request = $request;
         $this->wishlistFactory = $wishlistFactory;
         $this->customerSession = $customerSession;
@@ -90,7 +97,7 @@ class WishlistProvider implements \Magento\Wishlist\Controller\WishlistProviderI
             }
 
             if ($wishlistId) {
-                $wishlist->load($wishlistId);
+                $this->wishlistResource->load($wishlist, $wishlistId);
             } elseif ($customerId) {
                 $wishlist->loadByCustomerId($customerId, true);
             }

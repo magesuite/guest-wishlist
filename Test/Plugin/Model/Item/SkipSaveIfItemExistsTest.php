@@ -19,6 +19,7 @@ class SkipSaveIfItemExistsTest extends \Magento\TestFramework\TestCase\AbstractC
     protected ?\Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
     protected ?\MageSuite\GuestWishlist\Controller\WishlistProvider $wishlistDataProvider;
     protected ?\Magento\Wishlist\Model\WishlistFactory $wishlistFactory;
+    protected ?\Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource;
 
     public function setUp(): void
     {
@@ -30,6 +31,7 @@ class SkipSaveIfItemExistsTest extends \Magento\TestFramework\TestCase\AbstractC
         $this->productRepository = $this->_objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->wishlistDataProvider = $this->_objectManager->get(\MageSuite\GuestWishlist\Controller\WishlistProvider::class);
+        $this->wishlistResource = $this->_objectManager->get(\Magento\Wishlist\Model\ResourceModel\Wishlist::class);
         $this->wishlistFactory = $this->_objectManager->get(\Magento\Wishlist\Model\WishlistFactory::class);
     }
 
@@ -98,7 +100,7 @@ class SkipSaveIfItemExistsTest extends \Magento\TestFramework\TestCase\AbstractC
             $wishlist = $this->getWishlistByCustomerId->execute($customerId);
         } else {
             $wishlist = $this->wishlistFactory->create();
-            $wishlist->load($this->cookieManager->getCookie('wishlist'), 'sharing_code');
+            $this->wishlistResource->load($wishlist, $this->cookieManager->getCookie('wishlist'), 'sharing_code');
         }
 
         return $wishlist;

@@ -20,14 +20,18 @@ class CookieBasedWishlistProvider
 
     protected \MageSuite\GuestWishlist\Helper\Configuration $configuration;
 
+    protected \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource;
+
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Framework\Session\SessionManagerInterface $sessionManager,
         \Magento\Framework\Math\Random $random,
-        \MageSuite\GuestWishlist\Helper\Configuration $configuration
+        \MageSuite\GuestWishlist\Helper\Configuration $configuration,
+        \Magento\Wishlist\Model\ResourceModel\Wishlist $wishlistResource
     ) {
+        $this->wishlistResource = $wishlistResource;
         $this->cookieManager = $cookieManager;
         $this->wishlistFactory = $wishlistFactory;
         $this->random = $random;
@@ -41,7 +45,7 @@ class CookieBasedWishlistProvider
         $wishlist = $this->wishlistFactory->create();
 
         if ($this->cookieManager->getCookie('wishlist')) {
-            $wishlist->load($this->cookieManager->getCookie('wishlist'), 'sharing_code');
+            $this->wishlistResource->load($wishlist, $this->cookieManager->getCookie('wishlist'), 'sharing_code');
         }
 
         if ($wishlist->getId() && (int) $wishlist->getCustomerId() === 0) {
@@ -55,7 +59,7 @@ class CookieBasedWishlistProvider
         $newWishlist = $this->wishlistFactory->create();
         $newWishlist->setCustomerId(0);
         $newWishlist->setSharingCode($this->random->getUniqueHash());
-        $newWishlist->save();
+        $this->wishlistResource->save($newWishlist);
 
         $this->setCookieWithSharingCode($newWishlist->getSharingCode());
 

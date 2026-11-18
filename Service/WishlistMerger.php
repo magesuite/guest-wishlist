@@ -9,9 +9,31 @@ class WishlistMerger
      */
     protected $wishlistFactory;
 
-    public function __construct(\Magento\Wishlist\Model\WishlistFactory $wishlistFactory)
-    {
+    /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Item
+     */
+    protected $itemResource;
+
+    /**
+     * @var \MageSuite\GuestWishlist\Service\GetExistingWishlistItem
+     */
+    protected $getExistingWishlistItem;
+
+    /**
+     * @var bool
+     */
+    protected $mergeDuplicates;
+
+    public function __construct(
+        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
+        \Magento\Wishlist\Model\ResourceModel\Item $itemResource,
+        \MageSuite\GuestWishlist\Service\GetExistingWishlistItem $getExistingWishlistItem,
+        bool $mergeDuplicates = false
+    ) {
+        $this->mergeDuplicates = $mergeDuplicates;
         $this->wishlistFactory = $wishlistFactory;
+        $this->itemResource = $itemResource;
+        $this->getExistingWishlistItem = $getExistingWishlistItem;
     }
 
     /**
@@ -29,11 +51,12 @@ class WishlistMerger
         /** @var \Magento\Wishlist\Model\Item $item */
         foreach ($guestWishlistItems as $item) {
             $item->setWishlistId($customerWishlist->getId());
-            $savedItem = $item->save();
+            $existingItem = $this->mergeDuplicates ? $this->getExistingWishlistItem->execute($item) : null;
 
-            // if the item exists in customer's wishlist will be returned instead of the guest's one
-            if ($savedItem->getId() != $item->getId()) {
-                $item->delete();
+            if ($existingItem !== null && $existingItem->getId() != $item->getId()) {
+                $this->itemResource->delete($item);
+            } else {
+                $this->itemResource->save($item);
             }
         }
     }
